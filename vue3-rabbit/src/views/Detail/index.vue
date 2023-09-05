@@ -2,13 +2,21 @@
 import { getDetail } from "@/apis/detail";
 import { onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
-import DetailHot from '@/views/Detail/components/DetailHot.vue'
+import DetailHot from "@/views/Detail/components/DetailHot.vue";
 
 const route = useRoute();
 const data = ref({});
+// let arr = ref([]);
 const getDetailData = async () => {
   const res = await getDetail(route.params.id);
+  console.log(res);
   data.value = res.result;
+  console.log(data.value);
+
+  // for (var i in data.value.mainPictures) {
+  //   arr.value.push(data.value.mainPictures[i]);
+  // }
+  // console.log(arr.value);
 };
 onMounted(() => {
   getDetailData();
@@ -21,9 +29,15 @@ onMounted(() => {
       <div class="bread-container">
         <el-breadcrumb separator=">">
           <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-          <el-breadcrumb-item :to="{ path: `/category/${data.categories?.[1].id}` }">{{data.categories?.[1].name}} </el-breadcrumb-item>
-          <el-breadcrumb-item :to="{ path: `/category/sub/${data.categories?.[0].id}` }">{{data.categories?.[0].name}} </el-breadcrumb-item>
-          <el-breadcrumb-item>{{data.name}}</el-breadcrumb-item>
+          <el-breadcrumb-item
+            :to="{ path: `/category/${data.categories?.[1].id}` }"
+            >{{ data.categories?.[1].name }}
+          </el-breadcrumb-item>
+          <el-breadcrumb-item
+            :to="{ path: `/category/sub/${data.categories?.[0].id}` }"
+            >{{ data.categories?.[0].name }}
+          </el-breadcrumb-item>
+          <el-breadcrumb-item>{{ data.name }}</el-breadcrumb-item>
         </el-breadcrumb>
       </div>
       <!-- 商品信息 -->
@@ -31,39 +45,40 @@ onMounted(() => {
         <div>
           <div class="goods-info">
             <div class="media">
+              <!-- {{ data.mainPictures }} -->
               <!-- 图片预览区 -->
-
+              <XtxImageView :image-list="data.mainPictures"></XtxImageView>
               <!-- 统计数量 -->
               <ul class="goods-sales">
                 <li>
                   <p>销量人气</p>
-                  <p>{{data.salesCount}}+</p>
+                  <p>{{ data.salesCount }}+</p>
                   <p><i class="iconfont icon-task-filling"></i>销量人气</p>
                 </li>
                 <li>
                   <p>商品评价</p>
-                  <p>{{data.commentCount}}+</p>
+                  <p>{{ data.commentCount }}+</p>
                   <p><i class="iconfont icon-comment-filling"></i>查看评价</p>
                 </li>
                 <li>
                   <p>收藏人气</p>
-                  <p>{{data.collectCount}}+</p>
+                  <p>{{ data.collectCount }}+</p>
                   <p><i class="iconfont icon-favorite-filling"></i>收藏商品</p>
                 </li>
                 <li>
                   <p>品牌信息</p>
-                  <p>{{data.brand?.name}}</p>
+                  <p>{{ data.brand?.name }}</p>
                   <p><i class="iconfont icon-dynamic-filling"></i>品牌主页</p>
                 </li>
               </ul>
             </div>
             <div class="spec">
               <!-- 商品信息区 -->
-              <p class="g-name">{{data.name}}</p>
-              <p class="g-desc">{{data.desc}}</p>
+              <p class="g-name">{{ data.name }}</p>
+              <p class="g-desc">{{ data.desc }}</p>
               <p class="g-price">
-                <span>{{data.oldPrice}}</span>
-                <span> {{data.price}}</span>
+                <span>{{ data.oldPrice }}</span>
+                <span> {{ data.price }}</span>
               </p>
               <div class="g-service">
                 <dl>
@@ -81,7 +96,7 @@ onMounted(() => {
                 </dl>
               </div>
               <!-- sku组件 -->
-
+              <XtxSku :goods="data"></XtxSku>
               <!-- 数据组件 -->
 
               <!-- 按钮组件 -->
@@ -100,20 +115,28 @@ onMounted(() => {
                 <div class="goods-detail">
                   <!-- 属性 -->
                   <ul class="attrs">
-                    <li v-for="item in data.details.properties" :key="item.value">
-                      <span class="dt">{{item.name}}</span>
-                      <span class="dd">{{item.value}}</span>
+                    <li
+                      v-for="item in data.details.properties"
+                      :key="item.value"
+                    >
+                      <span class="dt">{{ item.name }}</span>
+                      <span class="dd">{{ item.value }}</span>
                     </li>
                   </ul>
                   <!-- 图片 -->
-                  <img v-for="img in data.details.pictures" :src="img" :key="img" alt="">
+                  <img
+                    v-for="img in data.details.pictures"
+                    :src="img"
+                    :key="img"
+                    alt=""
+                  />
                 </div>
               </div>
             </div>
             <!-- 24热榜+专题推荐 -->
             <div class="goods-aside">
-                <DetailHot title="24小时热榜" :hotType="1" />
-                <DetailHot title="周热榜" :hotType="2"/>
+              <DetailHot title="24小时热榜" :hotType="1" />
+              <DetailHot title="周热榜" :hotType="2" />
             </div>
           </div>
         </div>
