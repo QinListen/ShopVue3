@@ -10,8 +10,15 @@ export const useUserStore = defineStore('user', () => {
         const res = await loginApi({ account, password });
         userInfo.value = res.result
     };
-    return { userInfo, getUserInfo }
+
+    // 退出时清除用户信息
+    const clearUserInfo = () => {
+        userInfo.value = {}
+    }
+
+    return { userInfo, getUserInfo, clearUserInfo }
 },
     {
+        //这是一个插件，会在每次调用mutation时触发  用于持久化数据 相当于自己封装的localStorage
         persist: true,
     })

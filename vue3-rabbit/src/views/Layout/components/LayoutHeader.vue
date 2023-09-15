@@ -1,5 +1,6 @@
 <script setup>
 import { useCateGoryStore } from "@/stores/category";
+import HeaderCard from "@/views/Layout/components/HeaderCard.vue"
 const CateGoryStore = useCateGoryStore();
 </script>
 
@@ -23,6 +24,7 @@ const CateGoryStore = useCateGoryStore();
         <input type="text" placeholder="搜一搜" />
       </div>
       <!-- 头部购物车 -->
+      <HeaderCard></HeaderCard>
     </div>
   </header>
 </template>
